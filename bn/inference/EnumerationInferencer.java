@@ -1,6 +1,7 @@
 package bn.inference;
 
 import bn.core.Value;
+// import jdk.internal.jshell.tool.resources.l10n;
 
 import java.util.*;
 
@@ -29,7 +30,7 @@ public class EnumerationInferencer implements Inferencer {
         return Q;
     }
    
-    public int sum = 0;
+    //public 
     
     public double enumerateAll(List<RandomVariable> vars, Assignment e, BayesianNetwork bn){//returns a probability
         if(vars.isEmpty()){
@@ -38,12 +39,12 @@ public class EnumerationInferencer implements Inferencer {
         RandomVariable Y = vars.get(0);
         vars.remove(0);
         if (e.containsKey(Y)){
-            //return P(Y=y | values assigned to Y’s parents in e) × ENUMERATE-ALL(REST(vars), e)
             return bn.getProbability(Y, e) * enumerateAll(vars, e, bn);
         }else{
-            //int sum = 0;
-            for (RandomVariable y: bn.getParents(Y)){
-                sum += bn.getProbability(y, e) * enumerateAll(vars, e, bn);
+            double sum = 0;
+            for (Value yi : Y.getDomain()){
+                 e.put(Y, yi);
+                 sum += bn.getProbability(Y, e) * enumerateAll(vars, e, bn);
             }
             return sum;
         }

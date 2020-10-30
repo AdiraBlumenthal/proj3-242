@@ -14,6 +14,7 @@ import bn.core.RandomVariable;
 import bn.core.Value;
 import bn.util.ArrayMap;
 
+
 /**
  * Base implementation of an Assignment as an ArrayMap from
  * RandomVariables to Values.
