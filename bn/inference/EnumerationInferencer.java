@@ -21,13 +21,16 @@ public class EnumerationInferencer implements Inferencer {
 
     public Distribution enumerationAsk(RandomVariable X, Assignment e, BayesianNetwork bn){
         Distribution Q = new bn.base.Distribution(X);
-        for (Value xi : Q.getVariable().getDomain()) {
+        //for (Value xi : Q.getVariable().getDomain()) {
+        for (Value xi : X.getDomain()) {
             //trying to set the double probability of the distribution q at the value xi
-            e.put(X, xi);
-            Q.set(xi, enumerateAll(bn.getVariablesSortedTopologically(), e, bn));   //where exi is evidence e plus the assignment x=xi
+            Assignment eCopy = e.copy();
+            eCopy.put(X, xi);
+            Q.put(xi, enumerateAll(bn.getVariablesSortedTopologically(), eCopy, bn));   //where exi is evidence e plus the assignment x=xi
         }
         Q.normalize();
         return Q;
+
     }
    
     //public 
@@ -38,13 +41,21 @@ public class EnumerationInferencer implements Inferencer {
         }
         RandomVariable Y = vars.get(0);
         vars.remove(0);
+
         if (e.containsKey(Y)){
+            //System.out.println("here");
+            // System.out.println(bn.getProbability(Y, e));
+            // System.out.println("y: "+ Y);
+            // System.out.println("e: "+ e);
             return bn.getProbability(Y, e) * enumerateAll(vars, e, bn);
         }else{
             double sum = 0;
             for (Value yi : Y.getDomain()){
-                 e.put(Y, yi);
-                 sum += bn.getProbability(Y, e) * enumerateAll(vars, e, bn);
+                Assignment eCopy = e.copy();
+                eCopy.put(Y, yi);
+                List<RandomVariable> rVars = new ArrayList<RandomVariable>(vars);
+                sum += bn.getProbability(Y, eCopy) * enumerateAll(rVars, eCopy, bn);
+                e.remove(Y);
             }
             return sum;
         }

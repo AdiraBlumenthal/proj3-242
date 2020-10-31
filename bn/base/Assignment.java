@@ -70,6 +70,16 @@ public class Assignment extends ArrayMap<RandomVariable,Value> implements bn.cor
 		return result;
 	}
 
+	// public Assignment deepCopy(){
+	// 	Assignment copied = new Assignment();
+	// 	for (Map.Entry<RandomVariable, Value> entry : this.entrySet()) {
+	// 		RandomVariable var = new RandomVariable(entry.getKey().getDomain());
+		
+	// 	}
+	// 	return null;
+	// }
+
+
 	public static void main(String[] argv) {
 		Value a1 = new StringValue("a1");
 		Value a2 = new StringValue("a2");
