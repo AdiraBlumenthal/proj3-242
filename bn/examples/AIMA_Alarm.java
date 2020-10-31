@@ -8,6 +8,7 @@ import bn.core.CPT;
 import bn.core.Distribution;
 import bn.core.Inferencer;
 import bn.core.RandomVariable;
+import bn.inference.ApproxInferencer;
 import bn.inference.EnumerationInferencer;
 import bn.base.BooleanDomain;
 import bn.base.BooleanValue;
@@ -108,11 +109,14 @@ public class AIMA_Alarm {
 		System.out.println(bn);
 		
 		System.out.println("P(B|j,m) = \\alpha <0.00059224,0.0014919> ~= <0.284,0.716>");
-		Inferencer exact = new EnumerationInferencer();
+		EnumerationInferencer exact = new EnumerationInferencer();
+		ApproxInferencer approx = new ApproxInferencer();
 		a = new bn.base.Assignment();
 		a.put(J, TRUE);
 		a.put(M, TRUE);
-		Distribution dist = exact.query(B, a, bn);
+		//Distribution dist = exact.query(B, a, bn);
+		approx.nSetter(100);
+		Distribution dist = approx.query(B, a, bn);
 		System.out.println(dist);
 	}
 

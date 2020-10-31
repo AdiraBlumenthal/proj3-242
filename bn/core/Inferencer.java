@@ -14,4 +14,6 @@ public interface Inferencer {
 	 */
 	public Distribution query(RandomVariable X, Assignment e, BayesianNetwork network);
 
+	//public Distribution approxQuery(int i, RandomVariable b, Assignment a, BayesianNetwork bn);
+
 }

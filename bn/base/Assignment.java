@@ -69,17 +69,17 @@ public class Assignment extends ArrayMap<RandomVariable,Value> implements bn.cor
 		}
 		return result;
 	}
-
-	// public Assignment deepCopy(){
-	// 	Assignment copied = new Assignment();
-	// 	for (Map.Entry<RandomVariable, Value> entry : this.entrySet()) {
-	// 		RandomVariable var = new RandomVariable(entry.getKey().getDomain());
-		
-	// 	}
-	// 	return null;
-	// }
-
-
+	@Override
+	public boolean checkConsistent(bn.core.Assignment evidence, bn.core.Assignment a) {
+		for(RandomVariable rand : evidence.keySet()){
+            if(a.containsKey(rand)){
+				if(!(a.get(rand).equals(evidence.get(rand)))){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	public static void main(String[] argv) {
 		Value a1 = new StringValue("a1");
 		Value a2 = new StringValue("a2");
@@ -115,5 +115,7 @@ public class Assignment extends ArrayMap<RandomVariable,Value> implements bn.cor
 		System.out.format("%s equals %s? %s\n", assignment, assignment2,
 				assignment.equals(assignment2));
 	}
+
+
 
 }
