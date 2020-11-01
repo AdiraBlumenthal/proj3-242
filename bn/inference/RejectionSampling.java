@@ -10,7 +10,7 @@ import bn.core.Inferencer;
 import bn.core.RandomVariable;
 import bn.core.Distribution;
 
-public class ApproxInferencer implements Inferencer{
+public class RejectionSampling implements Inferencer{
     
     public int sampleSize;
     public void nSetter(int n){
@@ -19,21 +19,20 @@ public class ApproxInferencer implements Inferencer{
 
     @Override
     public Distribution query(RandomVariable X, Assignment e, BayesianNetwork network) {
-        // int n = 0;
-        // return rejectionSampling(n, X, e, network);
         return rejectionSampling(sampleSize, X, e, network); //change back to samplesize (from 1)
     }
     
     public Distribution rejectionSampling(int sampleSize, RandomVariable X, Assignment e, BayesianNetwork bn){
         Distribution N = new bn.base.Distribution(X);
-        //Value x = new Value();
+        for(Value v : X.getDomain()){
+            N.set(v, 0.0);
+        }
         for(int j = 1; j < sampleSize; j++){
-            Assignment a = priorSample(bn);
+            Assignment a = priorSample(bn); //bolded x
             if(a.containsAll(e)){
-                System.out.println(e);
-                System.out.println(a);
-                System.out.println("\n\n\n");
-           }
+                Value v = a.get(X);
+                N.put(v, (N.get(a.get(X)) + 1.0));
+            }
         }
         N.normalize();
         return N;
@@ -41,7 +40,6 @@ public class ApproxInferencer implements Inferencer{
 
     public Assignment priorSample(BayesianNetwork bn){
         Assignment sample = new bn.base.Assignment();
-        
         for(RandomVariable rand : bn.getVariablesSortedTopologically()){
             Distribution dist = new bn.base.Distribution(rand);
             Distribution dist2 = new bn.base.Distribution(rand);
@@ -59,63 +57,10 @@ public class ApproxInferencer implements Inferencer{
                     break;
                 }
             }
-
         }
         return sample;
     }
-
-    // get probabiity in the Domain
-    // make a Distribution
-    // running sum of the Distribution 
-    // double randomVal = Math.random();
-    /**
-     * output is an assignment
-     * x is an assignment
-     * for each rand var in bn
-     *      add to the assignment a randomized value that the variable can take on (use getProbability to find the prob of each value happening)
-     */
-
-    /**
-     * <.1/rain, .3/sun, .6/cloud>    rand number = 0.45
-     * 
-     * <.1/rain, .4/sun, 1/cloud>
-     * for each double xi
-     *    if (0.45 > xi)
-     *       skip
-     *    else if (random number <= xi)
-     *       add that value to the assignment
-     */
-    
-
-
-
-    // function PRIOR-SAMPLE(bn) returns an event sampled from the prior specified by bn 
-    //     inputs: bn, a Bayesian network specifying joint distribution P(X1, . . . , Xn)
-    //     x ← an event with n elements 
-    //     for each variable Xi in X1,...,Xn do
-    //         x[i] ← a random sample from P(Xi | parents(Xi)) 
-    //     return x
-
-    
 }
-
-// function REJECTION-SAMPLING(X , e, bn, N) returns an estimate of P(X|e)     
-//  inputs: X, the query variable 
-//          e, observed values for variables E          
-//          bn, a Bayesian network          
-//          N, the total number of samples to be generated 
-//  local variables: N, a vector of counts for each value of X, initially zero 
-//  
-//  for j =1 to N do        
-//      x ← PRIOR-SAMPLE(bn)        
-//      if x is consistent with e then 
-//          N[x] ← N[x]+1 where x is the value of X in x 
-//  return NORMALIZE(N) 
-
-
-
-
-// ————————————————————————————————————————————————
 
 
 // function LIKELIHOOD-WEIGHTING(X , e, bn, N ) returns an estimate of P(X|e) 
@@ -127,7 +72,6 @@ public class ApproxInferencer implements Inferencer{
 //  for j =1 to N do        x, w ← WEIGHTED-SAMPLE(bn, e) 
 //      W[x]←W[x]+w where x is the value of X in x 
 //  return NORMALIZE(W)
-
 
 //  function WEIGHTED-SAMPLE(bn, e) returns an event and a weight 
 //  w ← 1; x ← an event with n elements initialized from e 
