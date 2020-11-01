@@ -28,7 +28,6 @@ public interface Assignment extends Map<RandomVariable,Value> {
 	 * Values).
 	 */
 	public Assignment copy();
-	public boolean checkConsistent(Assignment evidence, Assignment a);
 
 
 }

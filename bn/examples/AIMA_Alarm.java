@@ -99,7 +99,7 @@ public class AIMA_Alarm {
 		a = new bn.base.Assignment();
 		a.put(A, TRUE);
 		MgivenA.set(TRUE, a, 0.7);
-		MgivenA.set(FALSE, a, 1-0.8);
+		MgivenA.set(FALSE, a, 1-0.7);
 		a = new bn.base.Assignment();
 		a.put(A, FALSE);
 		MgivenA.set(TRUE, a, 0.01);
@@ -114,10 +114,11 @@ public class AIMA_Alarm {
 		a = new bn.base.Assignment();
 		a.put(J, TRUE);
 		a.put(M, TRUE);
-		//Distribution dist = exact.query(B, a, bn);
-		approx.nSetter(100);
-		Distribution dist = approx.query(B, a, bn);
-		System.out.println(dist);
+		// Distribution dist = exact.query(B, a, bn);
+		approx.nSetter(10000);
+		Distribution d = approx.query(B, a, bn);
+		// System.out.println(d);
+		// System.out.println(dist);
 	}
 
 }

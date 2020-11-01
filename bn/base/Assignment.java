@@ -69,17 +69,19 @@ public class Assignment extends ArrayMap<RandomVariable,Value> implements bn.cor
 		}
 		return result;
 	}
-	@Override
-	public boolean checkConsistent(bn.core.Assignment evidence, bn.core.Assignment a) {
-		for(RandomVariable rand : evidence.keySet()){
-            if(a.containsKey(rand)){
-				if(!(a.get(rand).equals(evidence.get(rand)))){
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+
+	// @Override
+	// public boolean checkConsistent(bn.core.Assignment evidence, bn.core.Assignment a) {
+	// 	for(RandomVariable rand : evidence.keySet()){
+    //         if(a.containsKey(rand)){
+	// 			if(!(a.get(rand).equals(evidence.get(rand)))){
+	// 				return false;
+	// 			}
+	// 		}
+	// 	}
+	// 	return true;
+	// }
+
 	public static void main(String[] argv) {
 		Value a1 = new StringValue("a1");
 		Value a2 = new StringValue("a2");

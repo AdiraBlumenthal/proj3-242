@@ -1,6 +1,9 @@
 package bn.inference;
 import bn.core.Value;
 import java.util.*;
+
+
+import bn.core.Domain;
 import bn.core.Assignment;
 import bn.core.BayesianNetwork;
 import bn.core.Inferencer;
@@ -18,7 +21,7 @@ public class ApproxInferencer implements Inferencer{
     public Distribution query(RandomVariable X, Assignment e, BayesianNetwork network) {
         // int n = 0;
         // return rejectionSampling(n, X, e, network);
-        return rejectionSampling(sampleSize, X, e, network);
+        return rejectionSampling(sampleSize, X, e, network); //change back to samplesize (from 1)
     }
     
     public Distribution rejectionSampling(int sampleSize, RandomVariable X, Assignment e, BayesianNetwork bn){
@@ -26,28 +29,74 @@ public class ApproxInferencer implements Inferencer{
         //Value x = new Value();
         for(int j = 1; j < sampleSize; j++){
             Assignment a = priorSample(bn);
-            if(a.checkConsistent(e, a)){
-                System.out.println("here");
-            }
+            if(a.containsAll(e)){
+                System.out.println(e);
+                System.out.println(a);
+                System.out.println("\n\n\n");
+           }
         }
-        return null;
+        N.normalize();
+        return N;
     }
 
     public Assignment priorSample(BayesianNetwork bn){
-        Assignment x = new bn.base.Assignment();
-        List<RandomVariable> bigX = bn.getVariablesSortedTopologically();
-        for(RandomVariable rand : bigX){
-           // x.put(rand, );
+        Assignment sample = new bn.base.Assignment();
+        
+        for(RandomVariable rand : bn.getVariablesSortedTopologically()){
+            Distribution dist = new bn.base.Distribution(rand);
+            Distribution dist2 = new bn.base.Distribution(rand);
+            double runSum = 0.0;
+            for (Value v: rand.getDomain()){
+                sample.put(rand, v);
+                dist.set(v, bn.getProbability(rand, sample));
+                runSum += dist.get(v);
+                dist2.set(v, runSum);
+            }
+            double randomValue = Math.random();
+            for (Value v: rand.getDomain()){
+                if(randomValue <= dist2.get(v)){
+                    sample.put(rand, v);
+                    break;
+                }
+            }
+
         }
-        return x;
+        return sample;
     }
+
+    // get probabiity in the Domain
+    // make a Distribution
+    // running sum of the Distribution 
+    // double randomVal = Math.random();
+    /**
+     * output is an assignment
+     * x is an assignment
+     * for each rand var in bn
+     *      add to the assignment a randomized value that the variable can take on (use getProbability to find the prob of each value happening)
+     */
+
+    /**
+     * <.1/rain, .3/sun, .6/cloud>    rand number = 0.45
+     * 
+     * <.1/rain, .4/sun, 1/cloud>
+     * for each double xi
+     *    if (0.45 > xi)
+     *       skip
+     *    else if (random number <= xi)
+     *       add that value to the assignment
+     */
     
+
+
+
     // function PRIOR-SAMPLE(bn) returns an event sampled from the prior specified by bn 
     //     inputs: bn, a Bayesian network specifying joint distribution P(X1, . . . , Xn)
     //     x ← an event with n elements 
     //     for each variable Xi in X1,...,Xn do
     //         x[i] ← a random sample from P(Xi | parents(Xi)) 
     //     return x
+
+    
 }
 
 // function REJECTION-SAMPLING(X , e, bn, N) returns an estimate of P(X|e)     
