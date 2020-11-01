@@ -9,6 +9,7 @@ import bn.core.Distribution;
 import bn.core.Inferencer;
 import bn.core.RandomVariable;
 import bn.inference.RejectionSampling;
+import bn.inference.LikelihoodWeighting;
 import bn.inference.EnumerationInferencer;
 import bn.base.BooleanDomain;
 import bn.base.BooleanValue;
@@ -111,14 +112,21 @@ public class AIMA_Alarm {
 		System.out.println("P(B|j,m) = \\alpha <0.00059224,0.0014919> ~= <0.284,0.716>");
 		EnumerationInferencer exact = new EnumerationInferencer();
 		RejectionSampling rejsamp = new RejectionSampling();
+		LikelihoodWeighting likeWeight = new LikelihoodWeighting();
 		a = new bn.base.Assignment();
 		a.put(J, TRUE);
 		a.put(M, TRUE);
 		// Distribution dist = exact.query(B, a, bn);
-		rejsamp.nSetter(1000000);
-		Distribution d = rejsamp.query(B, a, bn);
-		System.out.println(d);
-		//System.out.println(dist);
+		// System.out.println(dist);
+		
+		// rejsamp.nSetter(1000000);
+		// Distribution d1 = rejsamp.query(B, a, bn);
+		// System.out.println(d1);
+		
+		likeWeight.nSetter(100000);
+		Distribution d2 = likeWeight.query(B, a, bn);
+		System.out.println(d2);
+		
 	}
 
 }

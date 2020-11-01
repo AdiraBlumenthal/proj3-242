@@ -63,18 +63,3 @@ public class RejectionSampling implements Inferencer{
 }
 
 
-// function LIKELIHOOD-WEIGHTING(X , e, bn, N ) returns an estimate of P(X|e) 
-//  inputs: X , the query variable 
-//          e, observed values for variables E         
-//          bn, a Bayesian network specifying joint distribution 
-//          P(X1, . . . , Xn) N , the total number of samples to be generated 
-//  local variables: W, a vector of weighted counts for each value of X , initially zero 
-//  for j =1 to N do        x, w ← WEIGHTED-SAMPLE(bn, e) 
-//      W[x]←W[x]+w where x is the value of X in x 
-//  return NORMALIZE(W)
-
-//  function WEIGHTED-SAMPLE(bn, e) returns an event and a weight 
-//  w ← 1; x ← an event with n elements initialized from e 
-//  for each variable Xi in X1,...,Xn do 
-//  if Xi is an evidence variable with value xi in e        then w ←w × P(Xi = xi | parents(Xi))        else x[i] ← a random sample from P(Xi | parents(Xi )) 
-//  return x, w 
