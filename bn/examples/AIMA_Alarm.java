@@ -116,12 +116,12 @@ public class AIMA_Alarm {
 		a = new bn.base.Assignment();
 		a.put(J, TRUE);
 		a.put(M, TRUE);
-		// Distribution dist = exact.query(B, a, bn);
-		// System.out.println(dist);
+		Distribution dist = exact.query(B, a, bn);
+		System.out.println(dist);
 		
-		// rejsamp.nSetter(1000000);
-		// Distribution d1 = rejsamp.query(B, a, bn);
-		// System.out.println(d1);
+		rejsamp.nSetter(1000000);
+		Distribution d1 = rejsamp.query(B, a, bn);
+		System.out.println(d1);
 		
 		likeWeight.nSetter(100000);
 		Distribution d2 = likeWeight.query(B, a, bn);

@@ -13,6 +13,8 @@ import bn.core.Inferencer;
 import bn.core.RandomVariable;
 import bn.inference.EnumerationInferencer;
 import bn.util.ArraySet;
+import bn.inference.RejectionSampling;
+import bn.inference.LikelihoodWeighting;
 
 /**
  * The AIMA WetGrass example of a BayesianNetwork (AIMA Fig. 14.12).
@@ -101,10 +103,22 @@ public class AIMA_WetGrass {
 		
 		System.out.println("P(Rain|Sprinkler=true) = <0.3,0.7>");
 		Inferencer exact = new EnumerationInferencer();
+		RejectionSampling rejsamp = new RejectionSampling();
+		LikelihoodWeighting likeWeight = new LikelihoodWeighting();
 		a = new bn.base.Assignment();
 		a.put(S, TRUE);
 		Distribution dist = exact.query(R, a, bn);
 		System.out.println(dist);
+		
+		rejsamp.nSetter(1000000);
+		Distribution d1 = rejsamp.query(R, a, bn);
+		System.out.println(d1);
+		
+		likeWeight.nSetter(100000);
+		Distribution d2 = likeWeight.query(R, a, bn);
+		System.out.println(d2);
+
+
 	}
 
 }

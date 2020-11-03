@@ -268,7 +268,7 @@ public class XMLBIFParser {
 	 * With no arguments: reads aima-alarm.xml in the src tree 
 	 */
 	public static void main(String[] argv) throws IOException, ParserConfigurationException, SAXException {
-		String filename = "src/bn/examples/aima-alarm.xml";
+		String filename = " ";
 		if (argv.length > 0) {
 			filename = argv[0];
 		}
