@@ -25,9 +25,16 @@ import bn.parser.*;
 public class OurBNApproxInferencer {
     public static void main(String[] args)throws IOException, ParserConfigurationException, SAXException{
         RejectionSampling rejSamp = new RejectionSampling();
-		LikelihoodWeighting likeWeight = new LikelihoodWeighting();
-        rejSamp.nSetter(Integer.parseInt(args[0]));
-        likeWeight.nSetter(Integer.parseInt(args[0]));
+        LikelihoodWeighting likeWeight = new LikelihoodWeighting();
+        int sampleSize = 0;
+        try {
+            sampleSize = Integer.parseInt(args[0]);
+        }catch(NumberFormatException e){
+            System.out.println("Invalid sample size, default is 10000.");
+            sampleSize = 10000;
+        }
+        rejSamp.nSetter(sampleSize);
+        likeWeight.nSetter(sampleSize);
         String filename = args[1];
         String filename2 = filename.toLowerCase();
         BayesianNetwork network = new bn.base.BayesianNetwork();
